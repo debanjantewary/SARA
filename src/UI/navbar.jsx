@@ -7,6 +7,11 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
+import { useAuth0 } from "@auth0/auth0-react";
+import Avatar from "@material-ui/core/Avatar";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import { NavLink as RouterNavLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,6 +26,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 const Navbar = () => {
   const classes = useStyles();
+  const { user, isAuthenticated, logout } = useAuth0();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <div>
       <AppBar position="static" color="transparent">
@@ -33,12 +49,36 @@ const Navbar = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h6" className={classes.title} Link="">
             S.A.R.A.
           </Typography>
-          <IconButton color="inherit">
-            <SupervisedUserCircleIcon />
-          </IconButton>
+
+          {!isAuthenticated && (
+            <IconButton color="inherit">
+              <SupervisedUserCircleIcon />
+            </IconButton>
+          )}
+          {isAuthenticated && (
+            <IconButton
+              aria-controls="profile-menu"
+              aria-haspopup="true"
+              onClick={handleClick}
+              color="inherit"
+            >
+              <Avatar alt="Cindy Baker" src={user.picture} />
+            </IconButton>
+          )}
+          <Menu
+            id="profile-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem href="/profile">Profile</MenuItem>
+
+            <MenuItem onClick={() => logout()}>Logout</MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
     </div>

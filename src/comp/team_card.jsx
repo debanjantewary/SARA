@@ -17,16 +17,17 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Tooltip from "@material-ui/core/Tooltip";
 import Snackbar from "@material-ui/core/Snackbar";
-import CloseIcon from "@material-ui/icons/Close";
-import Button from "@material-ui/core/Button";
 import Badge from "@material-ui/core/Badge";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 250,
-    maxWidth: 350,
+    maxWidth: 500,
     marginTop: "5%",
     marginBottom: "4%",
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: 350,
+    },
   },
   media: {
     height: 0,

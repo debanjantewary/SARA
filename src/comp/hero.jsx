@@ -4,7 +4,11 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
-
+// import { githubProvider, googleProvider } from "../oauth/oauthMethods";
+// import SocialMediaAuth from "../oauth/auth";
+import { useAuth0 } from "@auth0/auth0-react";
+import Loading from "../UI/loading";
+// import UserProfile from "../user/profile";
 const useStyles = makeStyles((theme) => ({
   heroContent: {
     backgroundColor: theme.palette.background.paper,
@@ -17,33 +21,79 @@ const useStyles = makeStyles((theme) => ({
 
 const Hero = () => {
   const classes = useStyles();
+  // const handleOnClick = async (provider) => {
+  //   const res = await SocialMediaAuth(provider);
+  //   console.log(res);
+  // };
+
+  const { loginWithRedirect } = useAuth0();
+  const { logout } = useAuth0();
+  const { isAuthenticated, user, isLoading } = useAuth0();
+  if (isLoading)
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
   return (
     <div className={classes.heroContent}>
       <Container maxWidth="sm">
-        <Typography
-          component="h1"
-          variant="h2"
-          align="center"
-          color="textSecondary"
-          gutterBottom
-        >
-          S.A.R.A.
-        </Typography>
+        {!isAuthenticated && (
+          <Typography
+            component="h1"
+            variant="h2"
+            align="center"
+            color="textSecondary"
+            gutterBottom
+          >
+            S.A.R.A.
+          </Typography>
+        )}
+        {isAuthenticated && (
+          <Typography
+            component="h1"
+            variant="h2"
+            align="center"
+            color="textSecondary"
+            gutterBottom
+          >
+            Hello, {user.given_name}
+          </Typography>
+        )}
         <Typography variant="h5" align="center" color="textSecondary" paragraph>
-          This group consists of Satyajit Ghosh, Argha Chatterjee, Riju tewary,
-          Aritra Pandey. We share our moments here.
+          {/* <UserProfile /> */}
         </Typography>
         <div className={classes.heroButtons}>
           <Grid container spacing={2} justify="center">
             <Grid item>
-              <Button variant="contained" color="secondary">
-                VIEW ALBUM
+              <Button
+                // onClick={() => loginWithRedirect()}
+                variant="contained"
+                color="secondary"
+              >
+                Services
               </Button>
             </Grid>
+
             <Grid item>
-              <Button variant="outlined" color="inherit">
-                CONTACT US
-              </Button>
+              {!isAuthenticated && (
+                <Button
+                  onClick={() => loginWithRedirect()}
+                  variant="outlined"
+                  color="inherit"
+                >
+                  Sign In
+                </Button>
+              )}
+              {isAuthenticated && (
+                <Button
+                  // onClick={() => logout()}
+                  variant="outlined"
+                  color="inherit"
+                >
+                  My Profile
+                </Button>
+              )}
             </Grid>
           </Grid>
         </div>

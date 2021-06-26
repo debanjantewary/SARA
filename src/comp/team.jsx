@@ -8,7 +8,7 @@ export default function Team(props) {
   return (
     <Grid
       container
-      spacing={2}
+      spacing={1}
       diplay="flex"
       alignContent="center"
       alignItems="center"
